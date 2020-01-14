@@ -1,0 +1,65 @@
+/// <reference path="../steps.d.ts" />
+
+const assert = require('assert');
+
+const I = actor();
+
+module.exports = {
+  root: '#headerWidget',
+
+  fields: {
+    searchTermField: { name: 'searchTerm' },
+    storesLink: '.stores.frgt',
+    wishListElement: '.wishlist.frgt',
+    bagIconElement: '.icon-bag',
+    signInLink: '#SignInLink',
+    logo: '.logo.flft',
+    ideasAndInspirationText: 'Ideas & Inspiration',
+    CatalogueText: 'Catalogue',
+    topNavLink: '.menu-wrapper .main_menu_link',
+    topNavLinks: [
+      {
+        homeNEnt: '#topCatClass_home'[
+          {
+            homeByCat: {
+              appliances: '#topCatClass_home',
+              bedding: 'Appliances'
+            }
+          }
+        ]
+      }
+    ]
+  },
+  searchFor(term) {
+    I.fillField(this.fields.searchTermField, term);
+    I.pressKey('Enter');
+  },
+
+  hasGuestLinks() {
+    I.seeElement(this.fields.storesLink, this.root);
+    I.seeElement(this.fields.signInLink, this.root);
+    I.seeElement(this.fields.wishListElement, this.root);
+    I.seeElement(this.fields.bagIconElement, this.root);
+    I.seeElement(this.fields.logo, this.root);
+  },
+
+  async hasTopNav() {
+    I.see(this.fields.ideasAndInspirationText, this.root);
+    I.see(this.fields.CatalogueText, this.root);
+    I.seeElement(this.fields.topNavLink, this.root);
+    await this.numberOfCategories();
+  },
+
+  async numberOfCategories() {
+    const menuCount = await within(this.root, () => I.grabNumberOfVisibleElements(this.fields.topNavLink));
+    assert(menuCount >= 6);
+  },
+
+  navigateTo(ele) {
+    I.click(ele);
+  },
+
+  navigateToBagPage() {
+    this.navigateTo(this.fields.bagIconElement);
+  }
+};
