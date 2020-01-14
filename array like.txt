@@ -1,4 +1,4 @@
-/// <reference path="../steps.d.ts" /> change 1
+/// <reference path="../steps.d.ts" /> change 1, change 2
 
 const assert = require('assert');
 
